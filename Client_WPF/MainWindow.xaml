@@ -1,0 +1,166 @@
+﻿<Window x:Class="Client_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client_WPF"
+        mc:Ignorable="d"
+        Title="	Транспортно-пересадочные узлы" Height="550" Width="800" ResizeMode="CanMinimize">
+
+    <Grid Background="LightSteelBlue">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.4*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TabControl Grid.Column="0">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="3">Список</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <TabItem.Content>
+                    <StackPanel>
+
+                        <ListBox Background="IndianRed" ItemsSource="{Binding TransportNodes}" SelectedItem="{Binding SelectedTransportNode}" Height="430" >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5">
+                                        <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Path=TPUName}" />
+                                        <TextBlock Text="{Binding Path=District}" />
+                                        
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <Button Command="{Binding DownCommand}"
+                            CommandParameter="{Binding TransportNodes.Count}">Загрузить ещё</Button>
+
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem >
+
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="3">Текущая сессия</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <TabItem.Content>
+                    <StackPanel>
+
+                        <ListBox Background="IndianRed" ItemsSource="{Binding CacheList}" SelectedItem="{Binding SelectedTransportNode}" Height="410" >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5">
+                                        <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Path=TPUName}" />
+                                        <TextBlock Text="{Binding Path=District}" />
+                                        
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <Button Command="{Binding AddCommand}"
+                                CommandParameter="{Binding SelectedTransportNode}">Добавить в избранное</Button>
+                        <Button Command="{Binding RemoveCommand}"
+                            CommandParameter="{Binding SelectedTransportNode}">Удалить</Button>
+
+
+                    </StackPanel>
+                </TabItem.Content>
+
+            </TabItem>
+
+            <TabItem >
+
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="3"><Run Text="Избранное"/></TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <TabItem.Content>
+                    <StackPanel>
+
+                        <ListBox Background="IndianRed" ItemsSource="{Binding Favorites}" SelectedItem="{Binding SelectedTransportNode}" Height="410" >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5">
+                                        <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Path=TPUName}" />
+                                        <TextBlock Text="{Binding Path=District}" />
+                                        
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <Button Command="{Binding UpdateCommand}">Обновить</Button>
+                        <Button Command="{Binding ClearCommand}">Очистить избранное</Button>
+
+                    </StackPanel>
+                </TabItem.Content>
+
+            </TabItem>
+
+        </TabControl>
+
+        <WrapPanel Grid.Column="1" Width="180" Height="30" VerticalAlignment="Top" Margin="0 20" >
+
+            <TextBlock Grid.Column="1" Foreground="Black" FontSize="14" Text="Загружено " />
+            <TextBlock Grid.Column="1" Foreground="Black" FontSize="14" Text="{Binding TransportNodes.Count}" FontWeight="Bold" />
+            <TextBlock Grid.Column="1" Foreground="Black" FontSize="14" Text=" из " />
+            <TextBlock Grid.Column="1" Foreground="Black" FontSize="14" Text="{Binding dbSize}" FontWeight="Bold" />
+
+        </WrapPanel>
+
+        <StackPanel Grid.Column="1" Margin="0 55" DataContext="{Binding SelectedTransportNode}">
+
+            <TextBlock Foreground="Black" TextWrapping="Wrap" Width="470" Height="60" VerticalAlignment="Top">
+            <Run FontSize="14">Административный округ:</Run>
+            <LineBreak></LineBreak>
+            <Run Text="{Binding AdmArea}" FontSize="16" FontWeight="Bold"></Run>
+            </TextBlock>
+
+            <TextBlock Foreground="Black"  TextWrapping="Wrap" Width="470" Height="60" > 
+            <Run FontSize="14">Станция/платформа:</Run>
+            <LineBreak></LineBreak>
+            <Run Text="{Binding NearStation}" FontSize="16" FontWeight="Bold"></Run>
+            </TextBlock>
+
+            <TextBlock Foreground="Black" TextWrapping="Wrap" Width="470" Height="60" > 
+            <Run FontSize="14">Год ввода в эксплуатацию:</Run>
+            <LineBreak></LineBreak>
+            <Run Text="{Binding YearOfComissioning}" FontSize="16" FontWeight="Bold"></Run>
+            </TextBlock>
+
+            <TextBlock Foreground="Black" TextWrapping="Wrap" Width="470" Height="60" > 
+            <Run FontSize="14">Статус:</Run>
+            <LineBreak></LineBreak>
+            <Run Text="{Binding Status}" FontSize="16" FontWeight="Bold"></Run>
+            </TextBlock>
+
+            <TextBlock Foreground="Black" TextWrapping="Wrap" Width="470" Height="60" > 
+            <Run FontSize="14">Возможность пересадки:</Run>
+            <LineBreak></LineBreak>
+            <Run Text="{Binding AvailableTransfer}" FontSize="16" FontWeight="Bold"></Run>
+            </TextBlock>
+
+            <TextBlock Foreground="Black" TextWrapping="Wrap" Width="470" Height="60" > 
+            <Run FontSize="14">Количество мест:</Run>
+            <LineBreak></LineBreak>
+            <Run Text="{Binding CarCapacity}" FontSize="16" FontWeight="Bold"></Run>
+            </TextBlock>
+
+
+        </StackPanel>
+
+    </Grid>
+
+</Window>
